@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.warrenstrange.googleauth.GoogleAuthenticator;
+import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
+import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
 import dev.courseRegistration_client.model.Course;
 import dev.courseRegistration_client.model.Member;
 import dev.courseRegistration_client.service.CourseService;
@@ -51,9 +54,15 @@ public class LoginController implements Controller{
 		HttpSession session = request.getSession();
 		if(session.isNew() || session.getAttribute("email") ==null) {
 			session.setAttribute("email", email);
-			 SecretGenerator secretGenerator = new DefaultSecretGenerator();
-		     String secret = secretGenerator.generate();
+//			 SecretGenerator secretGenerator = new DefaultSecretGenerator();
+//		     String secret = secretGenerator.generate();
+			GoogleAuthenticator googleAuthenticator = new GoogleAuthenticator();
+			GoogleAuthenticatorKey googleAuthenticatorKey = googleAuthenticator.createCredentials();
+			String secret = googleAuthenticatorKey.getKey();
+			String QRUrl = GoogleAuthenticatorQRGenerator.getOtpAuthURL("adduci", "userId", googleAuthenticatorKey);
+			System.out.println(secret);
 			session.setAttribute("secret", secret);
+			session.setAttribute("QRUrl",QRUrl);
 			if(member.isAdmin()) {
 				session.setAttribute("admin", true);
 			}

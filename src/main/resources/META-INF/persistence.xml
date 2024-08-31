@@ -5,7 +5,7 @@
     <persistence-unit name="demo">
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3307/woori_course_registration?serverTimezone=UTC"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/woori_course_registration?serverTimezone=UTC"/>
             <property name="javax.persistence.jdbc.user" value="user"/>
             <property name="javax.persistence.jdbc.password" value="1234"/>
 

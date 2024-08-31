@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,6 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.warrenstrange.googleauth.GoogleAuthenticator;
+import com.warrenstrange.googleauth.GoogleAuthenticatorKey;
+import com.warrenstrange.googleauth.GoogleAuthenticatorQRGenerator;
 import dev.samstevens.totp.code.CodeGenerator;
 import dev.samstevens.totp.code.CodeVerifier;
 import dev.samstevens.totp.code.DefaultCodeGenerator;
@@ -42,28 +46,28 @@ public class SecondCheckController implements Controller {
 		}
 		String secret= session.getAttribute("secret").toString();
 
-	     QrData data = new QrData.Builder()
-	    		   .label("example@example.com")
-	    		   .secret(secret)
-	    		   .issuer("AppName")
-	    		   .algorithm(HashingAlgorithm.SHA1) // More on this below
-	    		   .digits(6)
-	    		   .period(30)
-	    		   .build();
-	     QrGenerator generator = new ZxingPngQrGenerator();
-	     byte[] imageData=null;
-		try {
-			imageData = generator.generate(data);
-		} catch (QrGenerationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	     String mimeType = generator.getImageMimeType();
-	  // mimeType = "image/png"
-	
-	     String dataUri = getDataUriForImage(imageData, mimeType);
+//	     QrData data = new QrData.Builder()
+//	    		   .label("example@example.com")
+//	    		   .secret(secret)
+//	    		   .issuer("AppName")
+//	    		   .algorithm(HashingAlgorithm.SHA1) // More on this below
+//	    		   .digits(6)
+//	    		   .period(30)
+//	    		   .build();
+//	     QrGenerator generator = new ZxingPngQrGenerator();
+//	     byte[] imageData=null;
+//		try {
+//			imageData = generator.generate(data);
+//		} catch (QrGenerationException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	     String mimeType = generator.getImageMimeType();
+//	  // mimeType = "image/png"
+//
+//	     String dataUri = getDataUriForImage(imageData, mimeType);
 	     // dataUri = data:image/png;base64,iVBORw0KGgoAAAANSU...
-	     out.print("<img src="+ dataUri+" />");
+//	     out.print("<img src="+ dataUri+" />");
 	        CodeGenerator codeGenerator = new DefaultCodeGenerator();
 
 	        TimeProvider timeProvider = new SystemTimeProvider();
@@ -84,14 +88,19 @@ public class SecondCheckController implements Controller {
 			}
 
 	        String code = codeToCheck;
-	        
+
+
+
+		String QRUrl = session.getAttribute("QRUrl").toString();
+		out.print("<img src="+ QRUrl+" />");
+
 			out.println("<form action='/demo_war_exploded/page/otp' method='post'>");
 			out.println("    <input type='password' name='code' placeholder='Enter your secondcode'>");
 			out.println("    <button type='submit'> 2차 인증 제출</button>");
 			out.println("</form>");
 			
 			System.out.println(secret);
-	        System.out.println(codeToCheck);
+//	        System.out.println(codeToCheck);
 
 	        
 	        
